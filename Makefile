@@ -1,13 +1,24 @@
-cmod = ocamlc -c -pp "camlp4o"
+cmod = ocamlc -c 
 cbin = ocamlc
 
 all : cli
 
-core : 
-	$(cmod) Lambdacalc_core.ml
+parlex :  
+	$(cmod) ast.ml
+	menhir --infer --explain parser.mly
+	ocamllex lexer.mll
+
+core:
+	$(cmod) ast.ml parser.mli parser.ml lexer.ml lcalc.ml
 
 cli_mod : core
 	$(cmod) cli.ml
 
-cli :   cli_mod
-	$(cbin) Lambdacalc_core.cmo cli.cmo -o cli
+cli :  	cli_mod
+	$(cbin)  ast.cmo parser.cmo lexer.cmo lcalc.cmo cli.ml -o cli
+	chmod +x cli
+
+clean:
+	rm *.cmo
+	rm *.cmi
+	parser.conflicts
