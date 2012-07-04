@@ -1,0 +1,88 @@
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<title>Lambda-calculator</title>
+<style>
+body {
+	width: 80%;
+}
+#term
+{
+background-color: #d2d2e2;
+margin-top: 5px;
+}
+#input
+{
+background-color: #d2d2e2;
+border: 0px;
+width:auto;
+font-size:12px;
+height:20px;
+vertical-align:baseline;
+resize:none;
+overflow-y:hidden;
+overflow-x:visible;
+}
+#prompt {
+font-family : Monospace;
+color:#858585;
+}
+#resultats
+{
+	margin-bottom:0px;
+	background-color: #e5e5ff;
+	padding-bottom: 15px;
+	min-height: 400px;
+}
+</style>
+</head>
+
+<body>
+<h1>Lambda-calc</h1>
+<div id="resultats">
+<p class="q">
+</p>
+<p class="r"></p>
+</div>
+
+<p id="term">
+<span id='prompt'>&gt;&gt;&gt;</span>
+<span id='input'></span>
+<span style="color: transparent; background-color: #909090;">&nbsp;</span>
+</p>
+<textarea name="blblbl" id="capturator" style="left:-1000000;position:absolute;"></textarea>
+<script>
+$('#term').click(function(){$('#capturator').focus()});
+$('#capturator').keydown( function (ev) {
+	if (ev.which == 13) {
+		quest=$('#input').text();
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) 		
+		{
+		 
+		rep = xhr.response;
+	
+		$('#resultats').append('<p class="q">');
+		$('#resultats').append(quest);
+		$('#resultats').append('</p>');
+		$('#resultats').append('<p class="r">');
+		$('#resultats').append(rep);
+		$('#resultats').append('<p class="r">');
+		$('#input').text('');
+		}
+		}
+		xhr.open("GET", "/lcalcapi?input="+quest);
+		xhr.send(null);
+}
+	else if ( (ev.which >= 65 && ev.which <=90) || ev.which == 190 || ev.which == 110 ||  ev.which == 48 ||  ev.which == 57) {
+		$('#input').append((if (ev.which == 190 || ev.which == 110) {"."} else if (ev.which == 48) {")"} else if (ev.which == 57){"("} else {String.fromCharCode(ev.which).toLowerCase()}))
+}
+});
+
+
+$('#input').css('height', $('#prompt').height());
+$('#input').css('width', $('#term').width()-$('#prompt').width()-15);
+</script>
+</body>
+</html>

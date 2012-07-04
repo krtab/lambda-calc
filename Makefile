@@ -19,6 +19,14 @@ cli :  	cli_mod
 	chmod +x cli
 
 clean:
+	touch a.cmo b.cmi
 	rm *.cmo
 	rm *.cmi
-	parser.conflicts
+	rm parser.conflicts
+
+core_lib: core
+	ocamlc -a  ast.cmo parser.cmo lexer.cmo lcalc.cmo cli.ml -o lcalc.cma
+
+http: core
+	 ocamlc -c ast.cmo parser.cmo lexer.cmo lcalc.cmo http.ml
+	 ocamlc str.cma unix.cma lcalc.cma http.cmo -o http
