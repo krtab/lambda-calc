@@ -8,23 +8,12 @@ body {
 }
 #term
 {
+font-family : Monospace;
 background-color: #d2d2e2;
 margin-top: 5px;
-}
-#input
-{
-background-color: #d2d2e2;
-border: 0px;
-width:auto;
-font-size:12px;
-height:20px;
-vertical-align:baseline;
-resize:none;
-overflow-y:hidden;
-overflow-x:visible;
+font-size: 14pt;
 }
 #prompt {
-font-family : Monospace;
 color:#858585;
 }
 #resultats
@@ -34,22 +23,23 @@ color:#858585;
 	padding-bottom: 15px;
 	min-height: 400px;
 }
+
+.r {
+margin-top: 0px;
+margin-left:12px;
+}
+.q {
+margin-bottom: 0px;
+color: #404040;
+}
 </style>
 </head>
 
 <body>
 <h1>Lambda-calc</h1>
-<div id="resultats">
-<p class="q">
-</p>
-<p class="r"></p>
-</div>
+<div id="resultats"></div>
 
-<p id="term">
-<span id='prompt'>&gt;&gt;&gt;</span>
-<span id='input'></span>
-<span style="color: transparent; background-color: #909090;">&nbsp;</span>
-</p>
+<p id="term"><span id='prompt'>&gt;&gt;&gt;</span><span id="input"></span><span style="color: transparent; background-color: #909090;">&nbsp;</span></p>
 <textarea name="blblbl" id="capturator" style="left:-1000000;position:absolute;"></textarea>
 <script>
 $('#term').click(function(){$('#capturator').focus()});
@@ -63,20 +53,34 @@ $('#capturator').keydown( function (ev) {
 		 
 		rep = xhr.response;
 	
-		$('#resultats').append('<p class="q">');
-		$('#resultats').append(quest);
-		$('#resultats').append('</p>');
-		$('#resultats').append('<p class="r">');
-		$('#resultats').append(rep);
-		$('#resultats').append('<p class="r">');
+		$('#resultats').append('<p class="q">'+quest+'</p>');
+		$('#resultats').append('<p class="r">'+rep+'</p>');
 		$('#input').text('');
 		}
 		}
 		xhr.open("GET", "/lcalcapi?input="+quest);
 		xhr.send(null);
 }
-	else if ( (ev.which >= 65 && ev.which <=90) || ev.which == 190 || ev.which == 110 ||  ev.which == 48 ||  ev.which == 57) {
-		$('#input').append((if (ev.which == 190 || ev.which == 110) {"."} else if (ev.which == 48) {")"} else if (ev.which == 57){"("} else {String.fromCharCode(ev.which).toLowerCase()}))
+	else if ( (ev.which >= 65 && ev.which <=90) || ev.which == 190 || ev.which == 110 ||  ev.which == 48 ||  ev.which == 57 ||  ev.which == 8) {
+		switch (ev.which){
+		case 190:
+		$('#input').append('.');
+		break;
+		case 110:
+		$('#input').append('.');
+		break;
+		case 48:
+		$('#input').append(')');
+		break;
+		case 57:
+		$('#input').append('(');
+		break
+		case 8:
+		$('#input').text($('#input').text().slice(0, -1));
+		break;
+		default:
+		$('#input').append(String.fromCharCode(ev.which).toLowerCase());
+		break}
 }
 });
 
