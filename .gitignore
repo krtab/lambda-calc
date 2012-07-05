@@ -1,0 +1,6 @@
+*.cmo
+*.cmi
+*.o
+publish.sh
+*.cmx
+*.cma
