@@ -54,7 +54,9 @@ $('#capturator').keydown( function (ev) {
 		rep = xhr.response;
 	
 		$('#resultats').append('<p class="q">'+quest+'</p>');
-		$('#resultats').append('<p class="r">'+rep+'</p>');
+		if (rep=="Error")
+			 {$('#resultats').append('<p class="r" style="color:red;">Error, please check your syntax</p>');}
+			else {$('#resultats').append('<p class="r">'+rep+'</p>');}
 		$('#input').text('');
 		}
 		}
