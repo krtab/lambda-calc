@@ -48,9 +48,11 @@ background-color:#FFFF85;
 <p id="term"><span id='prompt'>&gt;&gt;&gt;</span><span id="input"></span><span id= "cursor" style="color: transparent; background-color: #909090;">&nbsp;</span></p>
 <textarea name="blblbl" id="capturator" style="left:-1000000;position:absolute;"></textarea>
 <script>
+var i = 0
+var hist = new Array();
 $('#term').click(function(){$('#capturator').focus()});
 $('#capturator').keydown( function (ev) {
-	if (ev.which == 13) {
+	if (ev.which == 13 && $('#input').text()!='') {
 		quest=$('#input').text();
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -67,6 +69,8 @@ $('#capturator').keydown( function (ev) {
 		$('#input').text('');
 		$('#resultats').scrollTop(99999999);
 		current.click(function(){$('#input').append($(this).children('.q').first().text());$('#capturator').focus();});
+		hist.push(quest);
+		i=hist.length;
 		}
 		}
 		xhr.open("GET", "/lcalcapi?input="+quest);
@@ -91,8 +95,10 @@ $('#capturator').keydown( function (ev) {
 		break;
 		default:
 		$('#input').append(String.fromCharCode(ev.which).toLowerCase());
-		break}
-}
+		break}}
+	else if (ev.which == 38 && i>0 ) {i--; $('#input').text(hist[i]);}
+	else if (ev.which == 40) {if (i<(hist.length - 1)) {i++; $('#input').text(hist[i]);} else if (i==(hist.length - 1)) {$('#input').text('');}}
+
 });
 $('#capturator').focusin(function(){$('#cursor').css('background-color', '#404040')});
 $('#capturator').focusout(function(){$('#cursor').css('background-color', '#858585')});
