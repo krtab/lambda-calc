@@ -4,8 +4,10 @@
 <title>Lambda-calculator</title>
 <style>
 body {
-	width: 80%;
+	width: 65%;
 }
+h1, h2 { font-family:Verdana;}
+h2 {margin-bottom:5px;}
 #term
 {
 font-family : Monospace;
@@ -21,7 +23,8 @@ color:#858585;
 	margin-bottom:0px;
 	background-color: #e5e5ff;
 	padding-bottom: 15px;
-	min-height: 400px;
+	height: 400px;
+	overflow-y: auto;
 }
 
 .r {
@@ -32,14 +35,17 @@ margin-left:12px;
 margin-bottom: 0px;
 color: #404040;
 }
+.qr:hover {
+background-color:#FFFF85;
+}
 </style>
 </head>
 
 <body>
-<h1>Lambda-calc</h1>
+<h1>Lambda-calc <span style="font-size:12px;">(<a href="https://bitbucket.org/NougatRillettes/lambda-calculus">source</a>)</span></h1>
 <div id="resultats"></div>
 
-<p id="term"><span id='prompt'>&gt;&gt;&gt;</span><span id="input"></span><span style="color: transparent; background-color: #909090;">&nbsp;</span></p>
+<p id="term"><span id='prompt'>&gt;&gt;&gt;</span><span id="input"></span><span id= "cursor" style="color: transparent; background-color: #909090;">&nbsp;</span></p>
 <textarea name="blblbl" id="capturator" style="left:-1000000;position:absolute;"></textarea>
 <script>
 $('#term').click(function(){$('#capturator').focus()});
@@ -52,12 +58,15 @@ $('#capturator').keydown( function (ev) {
 		{
 		 
 		rep = xhr.response;
-	
-		$('#resultats').append('<p class="q">'+quest+'</p>');
+		$('#resultats').append('<div class="qr">');
+		var current = $('.qr:last');	
+		current.append('<p class="q">'+quest+'</p>');
 		if (rep=="Error")
-			 {$('#resultats').append('<p class="r" style="color:red;">Error, please check your syntax</p>');}
-			else {$('#resultats').append('<p class="r">'+rep+'</p>');}
+			 {current.append('<p class="r" style="color:red;">Error, please check your syntax</p>');}
+			else {current.append('<p class="r">'+rep+'</p>');}
 		$('#input').text('');
+		$('#resultats').scrollTop(99999999);
+		current.click(function(){$('#input').append($(this).children('.q').first().text());$('#capturator').focus();});
 		}
 		}
 		xhr.open("GET", "/lcalcapi?input="+quest);
@@ -85,10 +94,10 @@ $('#capturator').keydown( function (ev) {
 		break}
 }
 });
-
-
-$('#input').css('height', $('#prompt').height());
-$('#input').css('width', $('#term').width()-$('#prompt').width()-15);
+$('#capturator').focusin(function(){$('#cursor').css('background-color', '#404040')});
+$('#capturator').focusout(function(){$('#cursor').css('background-color', '#858585')});
 </script>
+<h2>How to use it</h2>
+<p class="r">- Click on an answer (highlighted on mouse-over) to repaste the corresponding question to the input area. </p>
 </body>
 </html>
